@@ -49,12 +49,12 @@ def mine():
     blockchain.mine_new_block()
     return pp(blockchain.to_json())
 
-@app.route('/add-transaction', methods=['GET'])
+@app.route('/add-transaction', methods=['POST'])
 def add_transaction():
-    donor = request.args.get("donor")
-    recipient = request.args.get("recipient")
-    donor = request.args.get("donor")
-    blockchain.add_transaction(amount, donor, recipient)
+    donor = request.form.get("donor")
+    recipient = request.form.get("recipient")
+    amount = request.form.get("amount")
+    blockchain.add_transaction(donor, recipient, amount)
     return pp(blockchain.to_json())
 
 def main():
