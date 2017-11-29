@@ -20,17 +20,20 @@ def index():
 
 @app.route('/mine', methods=['GET'])
 def mine():
-    blockchain.mine_new_block(transactions)
+    blockchain.mine_new_block(transactions[:])
+    transactions.clear()
     return pp(blockchain.to_json())
 
 @app.route('/add-transaction', methods=['POST'])
 def add_transaction():
-    transaction = dict()
-    transaction["donor"] = request.form.get("donor")
-    transaction["recipient"] = request.form.get("recipient")
-    transaction["amount"] = request.form.get("amount")
+    transaction = {
+        "donor": request.form.get("donor"),
+        "recipient": request.form.get("recipient"),
+        "amount": request.form.get("amount"),
+        "timestamp": datetime.now()
+    }
     transactions.append(transaction)
-    return pp(json.dumps(transaction, indent=4))
+    return pp(json.dumps(transaction, indent=4, default=str))
 
 def main():
     app.run(host='0.0.0.0', port=5000)
