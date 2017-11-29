@@ -6,6 +6,7 @@ from block_chain import BlockChain
 
 app = Flask(__name__)
 blockchain = BlockChain()
+transactions = []
 
 
 def pp(data):
@@ -19,16 +20,17 @@ def index():
 
 @app.route('/mine', methods=['GET'])
 def mine():
-    blockchain.mine_new_block()
+    blockchain.mine_new_block(transactions)
     return pp(blockchain.to_json())
 
 @app.route('/add-transaction', methods=['POST'])
 def add_transaction():
-    donor = request.form.get("donor")
-    recipient = request.form.get("recipient")
-    amount = request.form.get("amount")
-    blockchain.add_transaction(donor, recipient, amount)
-    return pp(blockchain.to_json())
+    transaction = dict()
+    transaction["donor"] = request.form.get("donor")
+    transaction["recipient"] = request.form.get("recipient")
+    transaction["amount"] = request.form.get("amount")
+    transactions.append(transaction)
+    return pp(json.dumps(transaction, indent=4))
 
 def main():
     app.run(host='0.0.0.0', port=5000)

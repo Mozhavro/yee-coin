@@ -3,7 +3,7 @@ import config
 
 
 class Block:
-    def __init__(self, index, timestamp, prev_hash, data=None, nonce=0):
+    def __init__(self, index, timestamp, prev_hash, data, nonce=0):
         self.index = index
         self.timestamp = timestamp
         self.data = data or list()
@@ -33,9 +33,3 @@ class Block:
         while not self.is_valid(self.hash):
             self.nonce += 1
             self.hash = self.hash_block()
-
-    def add_transaction(self, donor, recipient, amount):
-        self.data.append("{donor} send {amount} to {recipient}".format(
-                            donor=donor,
-                            amount=amount,
-                            recipient=recipient))
